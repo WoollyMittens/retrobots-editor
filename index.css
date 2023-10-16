@@ -1,0 +1,339 @@
+:root {
+	--icon-ghost-sm: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path fill="rgba(255,255,255,0.333)" d="M40.1 467.1l-11.2 9c-3.2 2.5-7.1 3.9-11.1 3.9C8 480 0 472 0 462.2V192C0 86 86 0 192 0S384 86 384 192V462.2c0 9.8-8 17.8-17.8 17.8c-4 0-7.9-1.4-11.1-3.9l-11.2-9c-13.4-10.7-32.8-9-44.1 3.9L269.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6l-26.6-30.5c-12.7-14.6-35.4-14.6-48.2 0L141.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6L84.2 471c-11.3-12.9-30.7-14.6-44.1-3.9zM160 192a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>');
+	--icon-ghost-md: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path fill="rgba(255,255,255,0.667)" d="M40.1 467.1l-11.2 9c-3.2 2.5-7.1 3.9-11.1 3.9C8 480 0 472 0 462.2V192C0 86 86 0 192 0S384 86 384 192V462.2c0 9.8-8 17.8-17.8 17.8c-4 0-7.9-1.4-11.1-3.9l-11.2-9c-13.4-10.7-32.8-9-44.1 3.9L269.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6l-26.6-30.5c-12.7-14.6-35.4-14.6-48.2 0L141.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6L84.2 471c-11.3-12.9-30.7-14.6-44.1-3.9zM160 192a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>');
+	--icon-ghost-lg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path fill="rgba(255,255,255,1)" d="M40.1 467.1l-11.2 9c-3.2 2.5-7.1 3.9-11.1 3.9C8 480 0 472 0 462.2V192C0 86 86 0 192 0S384 86 384 192V462.2c0 9.8-8 17.8-17.8 17.8c-4 0-7.9-1.4-11.1-3.9l-11.2-9c-13.4-10.7-32.8-9-44.1 3.9L269.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6l-26.6-30.5c-12.7-14.6-35.4-14.6-48.2 0L141.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6L84.2 471c-11.3-12.9-30.7-14.6-44.1-3.9zM160 192a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>');
+}
+
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+html {}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.sprite-editor {
+	display: grid;
+	grid-template-columns: 3fr 3fr 2fr 2fr 3fr 3fr;
+	grid-template-rows: auto;
+	grid-template-areas: 
+		"canvas canvas directions palette preview preview"
+		"canvas canvas layers palette preview preview"
+		"canvas canvas alpha palette preview preview"
+		"bank bank encoded encoded composition composition"
+		"frames frames encoded encoded lumakey chromakey";
+	gap: 2rem;
+	padding: 2rem;
+}
+
+.sprite-canvas {
+	grid-area: canvas;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	position: relative;
+	border: solid 1px black;
+	margin: 0;
+	padding: 0;
+}
+
+.sprite-canvas svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.sprite-canvas svg g {}
+
+.sprite-canvas svg g rect {
+	stroke-width: 0.1%;
+	cursor: pointer;
+}
+
+.sprite-canvas svg g.single rect {
+	stroke: gray;
+}
+
+.sprite-canvas svg g.back rect {
+	stroke: red;
+}
+
+.sprite-canvas svg g.middle rect {
+	stroke: green;
+}
+
+.sprite-canvas svg g.front rect {
+	stroke: blue;
+}
+
+.sprite-preview {
+	grid-area: preview;
+	justify-self: flex-end;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	position: relative;
+	border: solid 1px black;
+	margin: 0;
+	padding: 0;
+}
+
+.sprite-preview svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.sprite-controls {
+	display: contents;
+}
+
+.sprite-controls fieldset {
+	text-align: center;
+	border: solid 1px black;
+	padding: 1rem;
+	margin: 0;
+}
+
+.sprite-controls fieldset legend {
+	text-align: left;
+}
+
+.sprite-controls [type="text"],
+.sprite-controls select {
+	min-height: 2rem;
+}
+
+.sprite-controls button {
+	cursor: pointer;
+	min-height: 2rem;
+}
+
+.sprite-directions {
+	grid-area: directions;
+}
+
+.sprite-directions button:before {
+	display: block;
+	content: attr(data-action);
+	text-transform: uppercase;
+}
+
+.sprite-palette {
+	grid-area: palette;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto;
+	gap: 2px;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.sprite-palette input {
+	cursor: pointer;
+	appearance: none;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	margin: 0;
+}
+
+.sprite-palette input:checked {
+	outline: dashed 2px red;
+}
+
+.sprite-opacity {
+	grid-area: alpha;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto;
+	gap: 2px;
+}
+
+.sprite-opacity input {
+	cursor: pointer;
+	appearance: none;
+	width: 100%;
+	aspect-ratio: 1;
+	margin: 0;
+	padding: 20%;
+	background-origin: content-box;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-color: navy;
+}
+
+.sprite-opacity input:checked {
+	outline: dashed 2px red;
+}
+
+.sprite-opacity input[value="0.000"] {
+	background-image: none;
+}
+
+.sprite-opacity input[value="0.333"] {
+	background-image: var(--icon-ghost-sm);
+}
+
+.sprite-opacity input[value="0.667"] {
+	background-image: var(--icon-ghost-md);
+}
+
+.sprite-opacity input[value="1.000"] {
+	background-image: var(--icon-ghost-lg);
+}
+
+.sprite-stack {
+	grid-area: layers;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto;
+	gap: 2px;
+}
+
+.sprite-stack input {
+	cursor: pointer;
+	appearance: none;
+	width: 100%;
+	aspect-ratio: 1;
+	margin: 0;
+}
+
+.sprite-stack input:checked {
+	outline: dashed 2px red;
+}
+
+.sprite-stack input[value="single"] {
+	background-color: gray;
+}
+
+.sprite-stack input[value="back"] {
+	background-color: red;
+}
+
+.sprite-stack input[value="middle"] {
+	background-color: green;
+}
+
+.sprite-stack input[value="front"] {
+	background-color: blue;
+}
+
+.sprite-encoded {
+	grid-area: encoded;
+}
+
+.sprite-encoded textarea {
+	width: 100%;
+	height: 100%;
+	word-break: break-all;
+}
+
+.sprite-composition {
+	grid-area: composition;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	gap: 1rem;
+}
+
+.sprite-composition label {
+	flex: 1 1 50%;
+	text-align: left;
+}
+
+.sprite-composition select {
+	display: block;
+	width: 100%;
+	margin: 0.5rem 0;
+}
+
+.sprite-composition input {
+	display: block;
+	width: 100%;
+	margin: 1rem 0;
+}
+
+.sprite-lumakey {
+	grid-area: chromakey;
+}
+
+.sprite-chromakey {
+	grid-area: lumakey;
+}
+
+.sprite-bank {
+	grid-area: bank;
+}
+
+.sprite-bank select {
+	width: 100%;
+}
+
+.sprite-frames {
+	grid-area: frames;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+	gap: 1rem;
+}
+
+.sprite-frames dl {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin: 0;
+	padding: 1rem;
+	border: solid 1px black;
+	overflow: auto;
+	max-height: 30rem;
+}
+
+.sprite-frames dl.new {}
+
+.sprite-frames dt {
+	flex: 1 1 100%;
+	display: flex;
+	gap: 1rem;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.sprite-frames dl.new dt {
+	justify-content: center;
+}
+
+.sprite-frames dd {
+	margin: 0;
+	padding: 1rem;
+	border: solid 1px black;
+	flex: 0 1 20%;
+}
+
+.sprite-frames input {}
+
+.sprite-frames button {}
+
+.sprite-frames [data-action="sprite-id"] {
+	flex: 1 1 auto;
+}
+
+.sprite-frames [data-action="delete-frame"] {}
+
+/* TODO: show when hovered */
+
+.sprite-frames [data-action="edit-frame"] {}
+
+.sprite-frames [data-action="import-frame"] {}
+
+.sprite-frames [data-action="delete-frame"] {}
+
+.sprite-frames [data-action="add-frame"] {}
+
+.sprite-frames [data-action="add-sprite"] {}

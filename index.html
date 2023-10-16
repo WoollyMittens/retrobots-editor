@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Parallax Sprite Experiment</title>
+	<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, width=device-width" />
+	<link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+
+	<section class="sprite-editor">
+
+		<figure class="sprite-canvas"></figure>
+
+		<form class="sprite-controls">
+			<fieldset class="sprite-directions">
+				<legend>Orientation</legend>
+				<button data-action="nw"></button><button data-action="n"></button><button data-action="ne"></button><br/>
+				<button data-action="w"></button><button data-action="x"></button><button data-action="e"></button><br/>
+				<button data-action="sw"></button><button data-action="s"></button><button data-action="se"></button><br/>
+			</fieldset>
+
+			<fieldset class="sprite-palette">
+				<legend>Palette</legend>
+			</fieldset>
+
+			<fieldset class="sprite-opacity">
+				<legend>Transparency</legend>
+			</fieldset>
+
+			<fieldset class="sprite-stack">
+				<legend>Layers</legend>
+			</fieldset>
+
+			<fieldset class="sprite-encoded">
+				<legend>Output</legend>
+				<textarea name="encoded"></textarea>
+			</fieldset>
+
+			<fieldset class="sprite-composition">
+				<legend>Composition</legend>
+				<label>Bottom <select data-action="preview-bottom" name="bottom"><option>---</option></select></label>
+				<label>Top <select data-action="preview-top" name="top"><option>---</option></select></label>
+				<label>Background <select data-action="preview-background" name="background"><option>---</option></select></label>
+				<label>Light <input data-action="preview-lighting" type="range" min="0" max="2" step="0.1" value="1"/></label>
+			</fieldset>
+
+			<fieldset class="sprite-lumakey">
+				<legend>Luminous Colours</legend>
+			</fieldset>
+
+			<fieldset class="sprite-chromakey">
+				<legend>Cycling Colour</legend>
+			</fieldset>
+
+			<fieldset class="sprite-bank">
+				<legend>Sprite Banks</legend>
+				<select data-action="select-bank" name="bank" onchange="window.editor.updateModel({'padding': 0, 'layers': ['single']});">
+					<option>Sprites</option>
+					<option>Backgrounds</option>
+				</select>
+			</fieldset>
+
+			<fieldset class="sprite-frames">
+				<legend>Animation Frames</legend>
+				<dl>
+					<dt>
+						<input data-action="sprite-id" type="text"/>
+						<button data-action="delete-frame">Delete</button>
+					</dt>
+					<dd>
+						<button data-action="edit-frame">Edit</button>
+						<button data-action="import-frame">Import</button>
+						<button data-action="delete-frame">Delete</button>
+					</dd>
+					<dd class="new">
+						<button data-action="add-frame">Add</button>
+					</dd>
+				</dl>
+				<dl class="new">
+					<dt>
+						<button data-action="add-sprite">New</button>
+					</dt>
+				</dl>
+			</fieldset>
+		</form>
+
+		<figure class="sprite-preview"></figure>
+
+	</section>
+
+	<script src="index.js" type="module"></script>
+</body>
+
+</html>
