@@ -17,16 +17,17 @@ body {
 
 .sprite-editor {
 	display: grid;
-	grid-template-columns: 3fr 3fr 2fr 2fr 3fr 3fr;
-	grid-template-rows: auto;
+	grid-template-columns:4fr 1fr 1fr 4fr;
+	grid-template-rows: auto auto auto 1fr;
 	grid-template-areas: 
-		"canvas canvas directions palette preview preview"
-		"canvas canvas layers palette preview preview"
-		"canvas canvas alpha palette preview preview"
-		"bank bank encoded encoded composition composition"
-		"frames frames encoded encoded lumakey chromakey";
+		"canvas directions palette preview"
+		"canvas layers palette preview"
+		"canvas alpha palette preview"
+		"encoded encoded encoded encoded";
 	gap: 2rem;
 	padding: 2rem;
+	width: 100vw;
+	height: 100vh;
 }
 
 .sprite-canvas {
@@ -233,108 +234,3 @@ body {
 	height: 100%;
 	word-break: break-all;
 }
-
-.sprite-composition {
-	grid-area: composition;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: auto;
-	gap: 1rem;
-}
-
-.sprite-composition label {
-	flex: 1 1 50%;
-	text-align: left;
-}
-
-.sprite-composition select {
-	display: block;
-	width: 100%;
-	margin: 0.5rem 0;
-}
-
-.sprite-composition input {
-	display: block;
-	width: 100%;
-	margin: 1rem 0;
-}
-
-.sprite-lumakey {
-	grid-area: chromakey;
-}
-
-.sprite-chromakey {
-	grid-area: lumakey;
-}
-
-.sprite-bank {
-	grid-area: bank;
-}
-
-.sprite-bank select {
-	width: 100%;
-}
-
-.sprite-frames {
-	grid-area: frames;
-	display: grid;
-	grid-template-columns: auto;
-	grid-template-rows: auto;
-	gap: 1rem;
-}
-
-.sprite-frames dl {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	margin: 0;
-	padding: 1rem;
-	border: solid 1px black;
-	overflow: auto;
-	max-height: 30rem;
-}
-
-.sprite-frames dl.new {}
-
-.sprite-frames dt {
-	flex: 1 1 100%;
-	display: flex;
-	gap: 1rem;
-	justify-content: space-between;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-}
-
-.sprite-frames dl.new dt {
-	justify-content: center;
-}
-
-.sprite-frames dd {
-	margin: 0;
-	padding: 1rem;
-	border: solid 1px black;
-	flex: 0 1 20%;
-}
-
-.sprite-frames input {}
-
-.sprite-frames button {}
-
-.sprite-frames [data-action="sprite-id"] {
-	flex: 1 1 auto;
-}
-
-.sprite-frames [data-action="delete-frame"] {}
-
-/* TODO: show when hovered */
-
-.sprite-frames [data-action="edit-frame"] {}
-
-.sprite-frames [data-action="import-frame"] {}
-
-.sprite-frames [data-action="delete-frame"] {}
-
-.sprite-frames [data-action="add-frame"] {}
-
-.sprite-frames [data-action="add-sprite"] {}

@@ -1,8 +1,5 @@
 import { Palette } from "./palette.js";
 import { Sprite } from "./sprite.js";
-import { Tile } from "./tile.js";
-import { Bank } from "./bank.js";
-import { Preview } from "./preview.js";
 
 class ParallexSpriteEditor {
 	constructor(model) {
@@ -163,7 +160,6 @@ class ParallexSpriteEditor {
 	updatePreview() {
 		console.log('update preview');
 		// copy the contents of the editor to the preview window
-		// TODO: use the preview class to populate
 		this.preview.innerHTML = this.sprite.html;
 		// export the binary bitmap as base64
 		this.encoded.value = this.sprite.hex;
