@@ -93,6 +93,7 @@ body {
 
 .sprite-controls fieldset {
 	text-align: center;
+	align-items: center;
 	border: solid 1px black;
 	padding: 1rem;
 	margin: 0;
@@ -190,7 +191,7 @@ body {
 .sprite-stack {
 	grid-area: layers;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: auto;
 	gap: 2px;
 }

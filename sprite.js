@@ -114,7 +114,7 @@ export class Sprite {
 
 	createBitmap() {
 		// build the bitmap
-		const buffer = new ArrayBuffer((this.model.width - 3) * (this.model.height - 3) * this.model.layers.length);
+		const buffer = new ArrayBuffer((this.model.width - 2) * (this.model.height - 2) * this.model.layers.length);
 		const bitmap = new Uint8Array(buffer);
 		return bitmap;
 	}
