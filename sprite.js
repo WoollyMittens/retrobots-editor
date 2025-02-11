@@ -165,8 +165,13 @@ export class Sprite {
 		for (let layer of this.model.layers) {
 			this.addGroup(layer, this.svg);
 		}
-		// add the svg to the editor
+		// add the svg to the container
 		this.model.container.appendChild(this.svg);
+	}
+
+	deleteSvg () {
+		// remove the svg from the container
+		this.model.container.removeChild(this.svg);
 	}
 
 	paint (index, colour) {
