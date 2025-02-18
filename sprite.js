@@ -169,26 +169,24 @@ export class Sprite {
 		this.model.container.appendChild(this.svg);
 	}
 
-	deleteSvg () {
-		// remove the svg from the container
-		this.model.container.removeChild(this.svg);
-	}
-
 	paint (index, colour) {
 		// change the pixel in the bitmap
 		this.bitmap[index] = this.decodeRgba(colour);
 		// redraw the sprite
 		this.redraw();
-		console.log('this.bitmap', this.bitmap);
 	}
 
 	redraw () {
-		// reset the direction
-		this.direction = this.offsets;
 		// reset the colours
 		for (let index in this.rectangles) {
 			let byte = this.bitmap[index];
 			this.rectangles[index].setAttribute('fill', this.encodeRgba(byte));
 		}
 	}
+
+	end () {
+		// remove the svg from the container
+		this.model.container.removeChild(this.svg);
+	}
+	
 }
