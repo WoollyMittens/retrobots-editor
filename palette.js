@@ -1,3 +1,5 @@
+import { rgbToHsl } from "./lib/rgbToHsl.js";
+
 export class Palette {
 	constructor (model) {
 		// store the model
@@ -38,7 +40,6 @@ export class Palette {
 		const shades = this.model.shades;
 		const multi = this.model.multi;
 		const swatches = [];
-	
 		for (let b of shades) {
 			for (let g of shades) {
 				for (let r of shades) {
@@ -58,48 +59,21 @@ export class Palette {
 					// report after an interaction
 					input.addEventListener('change', this.onSelected.bind(this));
 					// calculate HSL and store the swatch
-					let { h, s, l } = this.rgbToHsl(r, g, b);
+					let { h, s, l } = rgbToHsl(r, g, b);
 					swatches.push({ r, g, b, h, s, l, input });
 				}
 			}
 		}
-	
 		// sort swatches by hue, saturation, and luminance
 		swatches.sort((a, b) => (a.h * 1000 + (a.l + a.s) / 2) - (b.h * 1000 + (b.l + b.s) / 2));
-
 		// add the sorted swatches to the palette container
 		for (let swatch of swatches) {
 			this.paletteContainer.appendChild(swatch.input);
 		}
-	
 		// check the first option by default
 		if (!multi) this.paletteContainer.querySelector('input:first-of-type').checked = true;
 	}
 	
-	// helper function to convert RGB to HSL
-	rgbToHsl (r, g, b) {
-		r /= 255;
-		g /= 255;
-		b /= 255;
-		let max = Math.max(r, g, b), min = Math.min(r, g, b);
-		let h, s, l = (max + min) / 2;
-	
-		if (max === min) {
-			h = s = 0; // achromatic
-		} else {
-			let d = max - min;
-			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-			switch (max) {
-				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-				case g: h = (b - r) / d + 2; break;
-				case b: h = (r - g) / d + 4; break;
-			}
-			h /= 6;
-		}
-	
-		return { h: h * 360, s: s * 100, l: l * 100 };
-	}
-
 	addAlphaSwatches () {
 		// for every shade
 		const shades = this.model.shades;

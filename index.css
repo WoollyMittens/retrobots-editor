@@ -18,11 +18,12 @@ body {
 .sprite-editor {
 	display: grid;
 	grid-template-columns:4fr 1fr 1fr 4fr;
-	grid-template-rows: auto auto auto 1fr;
+	grid-template-rows: auto auto auto auto 1fr;
 	grid-template-areas: 
 		"canvas directions palette preview"
 		"canvas layers palette preview"
 		"canvas alpha palette preview"
+		"frames frames frames frames"
 		"encoded encoded encoded encoded";
 	gap: 2rem;
 	padding: 2rem;
@@ -39,35 +40,35 @@ body {
 	border: solid 1px black;
 	margin: 0;
 	padding: 0;
-}
 
-.sprite-canvas svg {
-	display: block;
-	width: 100%;
-	height: auto;
-}
-
-.sprite-canvas svg g {}
-
-.sprite-canvas svg g rect {
-	stroke-width: 0.1%;
-	cursor: pointer;
-}
-
-.sprite-canvas svg g.single rect {
-	stroke: gray;
-}
-
-.sprite-canvas svg g.back rect {
-	stroke: red;
-}
-
-.sprite-canvas svg g.middle rect {
-	stroke: green;
-}
-
-.sprite-canvas svg g.front rect {
-	stroke: blue;
+	svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	
+		g {
+			&.single rect {
+				stroke: gray;
+			}
+			
+			&.back rect {
+				stroke: red;
+			}
+			
+			&.middle rect {
+				stroke: green;
+			}
+			
+			&.front rect {
+				stroke: blue;
+			}
+	
+			rect {
+				stroke-width: 0.1%;
+				cursor: pointer;
+			}
+		}
+	}	
 }
 
 .sprite-preview {
@@ -80,48 +81,48 @@ body {
 	border: solid 1px black;
 	margin: 0;
 	padding: 0;
-}
 
-.sprite-preview svg {
-	display: block;
-	width: 100%;
-	height: auto;
+	svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
 }
 
 .sprite-controls {
 	display: contents;
-}
 
-.sprite-controls fieldset {
-	text-align: center;
-	align-items: center;
-	border: solid 1px black;
-	padding: 1rem;
-	margin: 0;
-}
-
-.sprite-controls fieldset legend {
-	text-align: left;
-}
-
-.sprite-controls [type="text"],
-.sprite-controls select {
-	min-height: 2rem;
-}
-
-.sprite-controls button {
-	cursor: pointer;
-	min-height: 2rem;
+	fieldset {
+		text-align: center;
+		align-items: center;
+		border: solid 1px black;
+		padding: 1rem;
+		margin: 0;
+	
+		legend {
+			text-align: left;
+		}
+	}
+	
+	[type="text"], 
+	select {
+		min-height: 2rem;
+	}
+	
+	button {
+		cursor: pointer;
+		min-height: 2rem;
+	}
 }
 
 .sprite-directions {
 	grid-area: directions;
-}
 
-.sprite-directions button:before {
-	display: block;
-	content: attr(data-action);
-	text-transform: uppercase;
+	button:before {
+		display: block;
+		content: attr(data-action);
+		text-transform: uppercase;
+	}
 }
 
 .sprite-palette {
@@ -133,18 +134,18 @@ body {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-around;
-}
 
-.sprite-palette input {
-	cursor: pointer;
-	appearance: none;
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	margin: 0;
-}
-
-.sprite-palette input:checked {
-	outline: dashed 2px red;
+	input {
+		cursor: pointer;
+		appearance: none;
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		margin: 0;
+	
+		&:checked {
+			outline: dashed 2px red;
+		}
+	}
 }
 
 .sprite-opacity {
@@ -153,40 +154,40 @@ body {
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: auto;
 	gap: 2px;
-}
 
-.sprite-opacity input {
-	cursor: pointer;
-	appearance: none;
-	width: 100%;
-	aspect-ratio: 1;
-	margin: 0;
-	padding: 20%;
-	background-origin: content-box;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
-	background-color: navy;
-}
+	input {
+		cursor: pointer;
+		appearance: none;
+		width: 100%;
+		aspect-ratio: 1;
+		margin: 0;
+		padding: 20%;
+		background-origin: content-box;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-color: navy;
 
-.sprite-opacity input:checked {
-	outline: dashed 2px red;
-}
-
-.sprite-opacity input[value="0.000"] {
-	background-image: none;
-}
-
-.sprite-opacity input[value="0.333"] {
-	background-image: var(--icon-ghost-sm);
-}
-
-.sprite-opacity input[value="0.667"] {
-	background-image: var(--icon-ghost-md);
-}
-
-.sprite-opacity input[value="1.000"] {
-	background-image: var(--icon-ghost-lg);
+		&:checked {
+			outline: dashed 2px red;
+		}
+		
+		&[value="0.000"] {
+			background-image: none;
+		}
+		
+		&[value="0.333"] {
+			background-image: var(--icon-ghost-sm);
+		}
+		
+		&[value="0.667"] {
+			background-image: var(--icon-ghost-md);
+		}
+		
+		&[value="1.000"] {
+			background-image: var(--icon-ghost-lg);
+		}
+	}
 }
 
 .sprite-stack {
@@ -195,42 +196,48 @@ body {
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: auto;
 	gap: 2px;
+
+	input {
+		cursor: pointer;
+		appearance: none;
+		width: 100%;
+		aspect-ratio: 1;
+		margin: 0;
+	
+		&:checked {
+			outline: dashed 2px red;
+		}
+		
+		&[value="single"] {
+			background-color: gray;
+		}
+		
+		&[value="back"] {
+			background-color: red;
+		}
+		
+		&[value="middle"] {
+			background-color: green;
+		}
+		
+		&[value="front"] {
+			background-color: blue;
+		}
+	}
 }
 
-.sprite-stack input {
-	cursor: pointer;
-	appearance: none;
-	width: 100%;
-	aspect-ratio: 1;
-	margin: 0;
-}
-
-.sprite-stack input:checked {
-	outline: dashed 2px red;
-}
-
-.sprite-stack input[value="single"] {
-	background-color: gray;
-}
-
-.sprite-stack input[value="back"] {
-	background-color: red;
-}
-
-.sprite-stack input[value="middle"] {
-	background-color: green;
-}
-
-.sprite-stack input[value="front"] {
-	background-color: blue;
+.sprite-frames {
+	grid-area: frames;
+	border: solid 1px black;
+	padding: 1rem;
 }
 
 .sprite-encoded {
 	grid-area: encoded;
-}
 
-.sprite-encoded textarea {
-	width: 100%;
-	height: 100%;
-	word-break: break-all;
+	textarea {
+		width: 100%;
+		height: 100%;
+		word-break: break-all;
+	}	
 }
