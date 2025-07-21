@@ -1,5 +1,7 @@
 import { Palette } from "./palette.js";
 import { Sprite } from "./sprite.js";
+import { Frames } from "./frames.js";
+import { Sequences } from "./sequences.js";
 
 class ParallexSpriteEditor {
 	constructor(model) {
@@ -13,6 +15,15 @@ class ParallexSpriteEditor {
 		this.alpha = 1;
 		// connect the output
 		this.encoded = document.querySelector(model.encoded);
+		this.encoded.addEventListener('change', this.decodeInput.bind(this));
+		// build the frames]
+		this.frames = new Frames({
+			'container': document.querySelector(this.model.frames)
+		});
+		// build the sequences
+		this.sequences = new Sequences({
+			'container': document.querySelector(this.model.sequences)
+		});
 		// build the sprite
 		this.canvas = document.querySelector(model.canvas);
 		this.sprite = new Sprite({
@@ -164,6 +175,13 @@ class ParallexSpriteEditor {
 		// export the binary bitmap as base64
 		this.encoded.value = this.sprite.hex;
 	}
+
+	decodeInput() {
+		// import the value from the preview field
+		this.sprite.hex = this.encoded.value;
+		// redraw the editor
+		this.updatePreview();
+	}
 }
 
 window.editor = new ParallexSpriteEditor({
@@ -175,11 +193,8 @@ window.editor = new ParallexSpriteEditor({
 	'stack': '.sprite-stack',
 	'directions': '.sprite-directions',
 	'encoded': '.sprite-encoded textarea',
-	'bank': '.sprite-bank',
 	'frames': '.sprite-frames',
-	'composition': '.sprite-composition',
-	'lumakey': '.sprite-lumakey',
-	'chromakey': '.sprite-chromakey',
+	'sequences': '.sprite-sequences',
 	'width': 16,
 	'height': 16,
 	'padding': 1,
