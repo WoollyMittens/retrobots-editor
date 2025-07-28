@@ -7,8 +7,6 @@ class ParallexSpriteEditor {
 	constructor(model) {
 		// store the model
 		this.model = model;
-		this.layers = {};
-		this.bitmaps = {};
 		this.red = 0;
 		this.green = 0;
 		this.blue = 0;
@@ -34,6 +32,7 @@ class ParallexSpriteEditor {
 			'layers': model.layers,
 			'shades': model.shades
 		});
+		this.sprite.hex = this.frames.load(0);
 		// only show the directions if applicable
 		this.directions = document.querySelector(model.directions);
 		this.showDirections();
@@ -173,12 +172,17 @@ class ParallexSpriteEditor {
 		// copy the contents of the editor to the preview window
 		this.preview.innerHTML = this.sprite.html;
 		// export the binary bitmap as base64
-		this.encoded.value = this.sprite.hex;
+		this.frames.update(this.sprite.hex);
+		// preview the bank json
+		this.encoded.value = this.frames.json;
 	}
 
 	decodeInput() {
-		// import the value from the preview field
-		this.sprite.hex = this.encoded.value;
+		// import the bank from the preview field
+		// TODO: use an import function that also updates the frames interface
+		this.frames.json = this.encoded.value;
+		// load the active/default frame from the bank
+		this.sprite.hex = this.frames.load();
 		// redraw the editor
 		this.updatePreview();
 	}
