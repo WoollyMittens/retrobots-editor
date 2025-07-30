@@ -19,12 +19,18 @@ export class Sprite {
 	}
 
 	set hex (value) {
-		if (!value) return;
-		// import the base64 code
-		const decoded = atob(value);
-		// convert it to a binary array
-		for (let index in decoded) { 
-			this.bitmap[index] = decoded.charCodeAt(index); 
+		// implement a blank value
+		if (!value) {
+			this.bitmap = this.createBitmap();
+		}
+		// or process the given value
+		else {
+			// import the base64 code
+			const decoded = atob(value);
+			// convert it to a binary array
+			for (let index in decoded) { 
+				this.bitmap[index] = decoded.charCodeAt(index); 
+			}
 		}
 		// redraw if needed
 		if (this.svg) this.redraw();

@@ -16,9 +16,9 @@
 		<form class="sprite-controls">
 			<fieldset class="sprite-directions">
 				<legend>Orientation</legend>
-				<button data-action="nw"></button><button data-action="n"></button><button data-action="ne"></button><br/>
-				<button data-action="w"></button><button data-action="x"></button><button data-action="e"></button><br/>
-				<button data-action="sw"></button><button data-action="s"></button><button data-action="se"></button><br/>
+				<button data-action="nw"></button><button data-action="n"></button><button data-action="ne"></button>
+				<button data-action="w"></button><button data-action="x"></button><button data-action="e"></button>
+				<button data-action="sw"></button><button data-action="s"></button><button data-action="se"></button>
 			</fieldset>
 
 			<fieldset class="sprite-palette">
@@ -39,15 +39,15 @@
 			</fieldset>
 		</form>
 
-		<nav class="sprite-frames">
-			Frames thumbnails<br/>
-			<small>TODO: Grid of numbered frames - clicking loads in editor</small>
-		</nav>
-
-		<nav class="sprite-sequences">
-			Animation sequences<br/>
-			<small>TODO: Array of frame numbers - play button loops in preview</small>
-		</nav>
+		<fieldset class="sprite-frames">
+			<legend>Frames</legend>
+			<nav></nav>
+		</fieldset>
+		
+		<fieldset class="sprite-sequences">
+			<legend>Sequences</legend>
+			<nav>TODO: Array of frame numbers - play button loops in preview</nav>
+		</fieldset>
 
 		<figure class="sprite-preview"></figure>
 

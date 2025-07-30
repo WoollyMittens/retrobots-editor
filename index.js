@@ -16,7 +16,13 @@ class ParallexSpriteEditor {
 		this.encoded.addEventListener('change', this.decodeInput.bind(this));
 		// build the frames]
 		this.frames = new Frames({
-			'container': document.querySelector(this.model.frames)
+			'container': document.querySelector(this.model.frames),
+			'onSelected': this.update.bind(this),
+			'width': model.width,
+			'height': model.height,
+			'padding': model.padding,
+			'layers': model.layers,
+			'shades': model.shades
 		});
 		// build the sequences
 		this.sequences = new Sequences({
@@ -32,7 +38,7 @@ class ParallexSpriteEditor {
 			'layers': model.layers,
 			'shades': model.shades
 		});
-		this.sprite.hex = this.frames.load(0);
+		this.sprite.hex = this.frames.load();
 		// only show the directions if applicable
 		this.directions = document.querySelector(model.directions);
 		this.showDirections();
@@ -53,30 +59,16 @@ class ParallexSpriteEditor {
 		this.controls.addEventListener('click', this.handleControls.bind(this));
 		this.controls.addEventListener('submit', evt => evt.preventDefault());
 		// update the preview
+		// TODO: loop through the active squence, or view just the active bank index
 		this.preview = document.querySelector(model.preview);
 		this.updatePreview();
 	}
 
-	updateModel(model) {
-		// merge the new model with the existing one
-		Object.assign(this.model, model)
-		console.log('model', this.model);
-		// reset the sprite
-		this.canvas.innerHTML = '';
-		this.sprite = new Sprite({
-			'container': this.canvas,
-			'width': this.model.width,
-			'height': this.model.height,
-			'layers': this.model.layers,
-			'shades': this.model.shades
-		});
-		// reset the directions
-		this.showDirections();
-		// re-apply the drawing clicks
-		this.handleDrawing();
-		// reset the stack
-		this.stack.innerHTML = '<legend>Layers</legend>';
-		this.buildStack(model.layers);
+	update() {
+		// reload the active sprite from the bank
+		this.sprite.hex = this.frames.load();
+		// redraw the preview
+		this.updatePreview();
 	}
 
 	showDirections() {
@@ -157,7 +149,6 @@ class ParallexSpriteEditor {
 		this.blue = colour.blue;
 		// set the active alpha value
 		this.alpha = colour.alpha;
-		console.log('picked', this);
 	}
 
 	changeStack(control) {
@@ -168,18 +159,18 @@ class ParallexSpriteEditor {
 	}
 
 	updatePreview() {
-		console.log('update preview');
 		// copy the contents of the editor to the preview window
 		this.preview.innerHTML = this.sprite.html;
 		// export the binary bitmap as base64
 		this.frames.update(this.sprite.hex);
 		// preview the bank json
+		// TODO: export both the frames and sequences
 		this.encoded.value = this.frames.json;
 	}
 
 	decodeInput() {
 		// import the bank from the preview field
-		// TODO: use an import function that also updates the frames interface
+		// TODO: import both the frames and sequences
 		this.frames.json = this.encoded.value;
 		// load the active/default frame from the bank
 		this.sprite.hex = this.frames.load();
@@ -197,8 +188,8 @@ window.editor = new ParallexSpriteEditor({
 	'stack': '.sprite-stack',
 	'directions': '.sprite-directions',
 	'encoded': '.sprite-encoded textarea',
-	'frames': '.sprite-frames',
-	'sequences': '.sprite-sequences',
+	'frames': '.sprite-frames > nav',
+	'sequences': '.sprite-sequences > nav',
 	'width': 16,
 	'height': 16,
 	'padding': 1,

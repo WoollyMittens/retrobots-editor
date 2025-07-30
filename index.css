@@ -120,6 +120,10 @@ body {
 
 .sprite-directions {
 	grid-area: directions;
+	display: grid;
+	gap: 2px;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto 1fr;
 
 	button:before {
 		display: block;
@@ -207,6 +211,7 @@ body {
 		width: 100%;
 		aspect-ratio: 1;
 		margin: 0;
+		position: relative;
 	
 		&:checked {
 			outline: dashed 2px red;
@@ -218,14 +223,19 @@ body {
 		
 		&[value="back"] {
 			background-color: red;
+			transform: translate(50%, -50%);
+			z-index: 10;
 		}
 		
 		&[value="middle"] {
 			background-color: green;
+			z-index: 20;
 		}
 		
 		&[value="front"] {
 			background-color: blue;
+			transform: translate(-50%, 50%);
+			z-index: 30;
 		}
 	}
 }
@@ -234,12 +244,61 @@ body {
 	grid-area: frames;
 	border: solid 1px black;
 	padding: 0.5rem;
+
+	nav {
+		display: grid;
+		grid-template-columns: repeat(8, 1fr);
+		gap: 0.5rem;
+	}
+
+	label {
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: 0.5rem;
+		align-items: center;
+		background-color: whitesmoke;
+		border: solid 1px black;
+		padding: 0.5rem;
+
+		&:has(input:checked) {
+			outline: dashed 2px red;
+		}
+
+		input[type="radio"] {
+			visibility: hidden;
+			position: absolute;
+		}
+
+		svg {
+			background-color: white;
+			grid-column: span 3;
+			border: solid 1px black;
+			aspect-ratio: 1;
+			width: 100%;
+			height: auto;
+		}
+
+		span {
+			font-size: 0.75rem;
+			text-align: center;
+		}
+
+		button {}
+
+	}
+
+	button[data-action="add"] {
+		font-size: 2rem;
+	}
 }
 
 .sprite-sequences {
 	grid-area: sequences;
 	border: solid 1px black;
 	padding: 0.5rem;
+
+	nav {}
 }
 
 .sprite-encoded {
