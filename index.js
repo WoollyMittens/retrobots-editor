@@ -29,9 +29,8 @@ class ParallexSpriteEditor {
 			'container': document.querySelector(this.model.sequences)
 		});
 		// build the sprite
-		this.canvas = document.querySelector(model.canvas);
 		this.sprite = new Sprite({
-			'container': this.canvas,
+			'container': document.querySelector(model.canvas),
 			'width': model.width,
 			'height': model.height,
 			'padding': model.padding,
@@ -60,7 +59,14 @@ class ParallexSpriteEditor {
 		this.controls.addEventListener('submit', evt => evt.preventDefault());
 		// update the preview
 		// TODO: loop through the active squence, or view just the active bank index
-		this.preview = document.querySelector(model.preview);
+		this.preview = new Sprite({
+			'container': document.querySelector(model.preview),
+			'width': model.width,
+			'height': model.height,
+			'padding': model.padding,
+			'layers': model.layers,
+			'shades': model.shades
+		});
 		this.updatePreview();
 	}
 
@@ -159,10 +165,18 @@ class ParallexSpriteEditor {
 	}
 
 	updatePreview() {
-		// copy the contents of the editor to the preview window
-		this.preview.innerHTML = this.sprite.html;
+		// TODO: get the active sequence
+		const spriteSequence = null;
+		const spriteStep = null;
+		// get the hex value of the sprite
+		const spriteHex = this.sprite.hex;
+		const spriteDirection = this.sprite.direction;
+		// mirror the bitmap in the preview
+		this.preview.hex = spriteHex;
+		// mirror the direction in the preview
+		this.preview.direction = spriteDirection;
 		// export the binary bitmap as base64
-		this.frames.update(this.sprite.hex);
+		this.frames.update(spriteHex);
 		// preview the bank json
 		// TODO: export both the frames and sequences
 		this.encoded.value = this.frames.json;

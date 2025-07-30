@@ -29,7 +29,7 @@ export class Frames {
     }
     // redraw the interface to reflect the stored bitmaps and active index
     redraw() {
-        // if the bank has a container 
+        // if the bank requires an interface 
         if (this.model.container) {
             // clear the container
             this.model.container.innerHTML = '';
@@ -80,7 +80,7 @@ export class Frames {
             }
             // make the last grid element an "add" button
             const button = document.createElement('button');
-            button.setAttribute('data-action', 'add');
+            button.setAttribute('data-action', 'add_frame');
             button.addEventListener('click', this.add.bind(this));
             button.innerHTML = '+';
             this.model.container.appendChild(button);

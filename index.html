@@ -46,7 +46,21 @@
 		
 		<fieldset class="sprite-sequences">
 			<legend>Sequences</legend>
-			<nav>TODO: Array of frame numbers - play button loops in preview</nav>
+			<label><input type="radio" name="sequence" value="" checked/> None</label>
+			<ul>
+				<li>
+					<label>
+						<input type="radio" name="sequence" value="0"/>
+						<span>Active</span>
+					</label>
+					<label>
+						<span>Frames</span>
+						<input type="text" name="frames" value="" pattern="^\d(?:,\d)*$" placeholder="1,2,3" required/>
+					</label>
+					<button data-action="remove_sequence">X</button>
+				</li>
+			</ul>
+			<button data-action="add_sequence">+</button>
 		</fieldset>
 
 		<figure class="sprite-preview"></figure>
