@@ -123,7 +123,13 @@ body {
 	display: grid;
 	gap: 2px;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto 1fr;
+	grid-template-rows: 1fr auto auto auto 1fr;
+
+	&:before {
+		content: "";
+		display: block;
+		grid-column: span 3;
+	}
 
 	button:before {
 		display: block;
