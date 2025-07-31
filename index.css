@@ -89,6 +89,31 @@ body {
 		display: block;
 		width: 100%;
 		height: auto;
+		transform: scale(0.5);
+	}
+
+	figcaption {
+		position: absolute;
+		right: 0.5rem;
+		top: 0.5rem;
+		background-color: rgba(255,255,255,0.7);
+		padding: 0.5rem;
+		border: solid 1px black;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		label {
+			display: flex;
+			gap: 0.5rem;
+			align-items: center;
+		}
+
+		span {
+			font-size: 0.75rem;
+		}
+
+		input[type="range"] {}
 	}
 }
 
@@ -144,7 +169,6 @@ body {
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: auto;
 	gap: 2px;
-	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-around;
 
@@ -251,7 +275,7 @@ body {
 	border: solid 1px black;
 	padding: 0.5rem;
 
-	nav {
+	> div {
 		display: grid;
 		grid-template-columns: repeat(8, 1fr);
 		gap: 0.5rem;
@@ -304,7 +328,63 @@ body {
 	border: solid 1px black;
 	padding: 0.5rem;
 
-	nav {}
+	> div {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		
+		input[type="radio"] {
+			margin: 0;
+		}
+	}
+
+	ul {
+		display: contents;
+		list-style: none;
+
+		li {
+			display: grid;
+			grid-template-columns: auto 1fr 2fr auto;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		label {
+			display: contents;
+			&:nth-of-type(1) {}
+
+			&:nth-of-type(2) {}
+		}
+
+		input[type="radio"] {}
+
+		input[type="text"] {
+			min-height: 2rem;
+		}
+
+		span {
+			display: none;
+		}
+
+		button[data-action="remove_sequence"] {
+			cursor: pointer;
+			min-height: 2rem;
+			min-width: 2rem;
+		}
+	}
+
+	 button[data-action="add_sequence"] {
+			cursor: pointer;
+			min-height: 2rem;
+			width: 100%;
+	}
 }
 
 .sprite-encoded {

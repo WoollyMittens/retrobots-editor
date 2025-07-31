@@ -41,29 +41,50 @@
 
 		<fieldset class="sprite-frames">
 			<legend>Frames</legend>
-			<nav></nav>
+			<div></div>
 		</fieldset>
 		
 		<fieldset class="sprite-sequences">
 			<legend>Sequences</legend>
-			<label><input type="radio" name="sequence" value="" checked/> None</label>
-			<ul>
-				<li>
-					<label>
-						<input type="radio" name="sequence" value="0"/>
-						<span>Active</span>
-					</label>
-					<label>
-						<span>Frames</span>
-						<input type="text" name="frames" value="" pattern="^\d(?:,\d)*$" placeholder="1,2,3" required/>
-					</label>
-					<button data-action="remove_sequence">X</button>
-				</li>
-			</ul>
-			<button data-action="add_sequence">+</button>
+			<div>
+				<label><input type="radio" name="sequence" value="" checked/> None</label>
+				<ul>
+					<li>
+						<label>
+							<input type="radio" name="sequence" value="0"/>
+							<span>Active</span>
+						</label>
+						<label>
+							<span>Name</span>
+							<input type="text" name="name" value="" required/>
+						</label>
+						<label>
+							<span>Frames</span>
+							<input type="text" name="frames" value="" pattern="^\d(?:,\d)*$" placeholder="1,2,3" required/>
+						</label>
+						<button data-action="remove_sequence">x</button>
+					</li>
+				</ul>
+				<button data-action="add_sequence">+</button>
+			</div>
 		</fieldset>
 
-		<figure class="sprite-preview"></figure>
+		<figure class="sprite-preview">
+			<figcaption>
+				<label>
+					<span>Rate:</span>
+					<input type="range" name="rate" min="0" max="60" step="5" value="15"/>
+				</label>
+				<label>
+					<span>Scale:</span>
+					<input type="range" name="scale" min="1" max="100" step="10" value="50"/>
+				</label>
+				<label>
+					<span>Background:</span>
+					<input type="color" name="background" value="#FFFFFF"/>
+				</label>
+			</figcaption>
+		</figure>
 
 	</section>
 
