@@ -113,7 +113,7 @@ export class Sprite {
 		let red = shades[(value & 0b11000000) >> 6];
 		let green = shades[(value & 0b00110000) >> 4];
 		let blue = shades[(value & 0b00001100) >> 2];
-		let alpha = shades[value & 0b00000011];
+		let alpha = shades[value & 0b00000011] / 255;
 		// encode the component colours into an rgba string
 		return `rgba(${red},${green},${blue},${alpha})`;
 	}

@@ -21,11 +21,12 @@ body {
 .sprite-editor {
 	display: grid;
 	grid-template-columns:4fr 1fr 1fr 4fr;
-	grid-template-rows: auto auto auto auto 1fr;
+	grid-template-rows: auto auto auto auto auto 1fr;
 	grid-template-areas: 
 		"canvas directions palette preview"
 		"canvas layers palette preview"
 		"canvas alpha palette preview"
+		"canvas playback palette preview"
 		"frames frames sequences sequences"
 		"encoded encoded encoded encoded";
 	gap: 1rem;
@@ -90,30 +91,6 @@ body {
 		width: 100%;
 		height: auto;
 		transform: scale(0.5);
-	}
-
-	figcaption {
-		position: absolute;
-		right: 0.5rem;
-		top: 0.5rem;
-		background-color: rgba(255,255,255,0.7);
-		padding: 0.5rem;
-		border: solid 1px black;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-
-		label {
-			display: flex;
-			gap: 0.5rem;
-			align-items: center;
-		}
-
-		span {
-			font-size: 0.75rem;
-		}
-
-		input[type="range"] {}
 	}
 }
 
@@ -253,7 +230,7 @@ body {
 		
 		&[value="back"] {
 			background-color: red;
-			transform: translate(50%, -50%);
+			transform: translate(25%, -12.5%);
 			z-index: 10;
 		}
 		
@@ -264,9 +241,36 @@ body {
 		
 		&[value="front"] {
 			background-color: blue;
-			transform: translate(-50%, 50%);
+			transform: translate(-25%, 12.5%);
 			z-index: 30;
 		}
+	}
+}
+
+.sprite-playback {
+	grid-area: playback;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	label {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+		width: 100%;
+	}
+
+	span {
+		font-size: 0.75rem;
+	}
+
+	input[type="range"] {
+		width: 100%;
+	}
+
+	input[type="color"] {
+		width: 100%;
 	}
 }
 

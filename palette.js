@@ -7,8 +7,8 @@ export class Palette {
 		// starting values
 		this.alpha = 1;
 		// fetch the containers
-		this.paletteContainer = model.containers[0];
-		this.opacityContainer = model.containers[1] || model.containers[0];
+		this.paletteContainer = model.container[0];
+		this.opacityContainer = model.container[1] || model.container[0];
 		// implement the palette swatches
 		this.addColourSwatches();
 		// implement the opacity swatches
@@ -17,17 +17,14 @@ export class Palette {
 
 	getSelection () {
 		// get all the checked colours
-		const swatches = [...this.paletteContainer.querySelectorAll('input:checked')];
+		const swatch = this.paletteContainer.querySelector('input:checked');
 		const opacity = this.opacityContainer.querySelector('input:checked');
-		const colours = swatches.map((swatch) => { 
-			let red = +swatch.getAttribute('data-red');
-			let green = +swatch.getAttribute('data-green');
-			let blue = +swatch.getAttribute('data-blue');
-			let alpha = +opacity.getAttribute('data-alpha');
-			let rgba  = `rgba(${red},${green},${blue},${alpha})`;
-			return {red, green, blue, alpha, rgba};
-		});
-		return colours;
+		let red = +swatch.getAttribute('data-red');
+		let green = +swatch.getAttribute('data-green');
+		let blue = +swatch.getAttribute('data-blue');
+		let alpha = +opacity.getAttribute('data-alpha');
+		let rgba  = `rgba(${red},${green},${blue},${alpha})`;
+		return {red, green, blue, alpha, rgba};
 	}
 
 	onSelected () {
@@ -38,7 +35,6 @@ export class Palette {
 	addColourSwatches () {
 		// for every shade of every component colour
 		const shades = this.model.shades;
-		const multi = this.model.multi;
 		const swatches = [];
 		for (let b of shades) {
 			for (let g of shades) {
@@ -46,8 +42,7 @@ export class Palette {
 					// create a swatch out of a form element
 					let colour = `rgb(${r},${g},${b})`;
 					let input = document.createElement('input');
-					// allow multi or single selections
-					input.setAttribute('type', multi ? 'checkbox' : 'radio');
+					input.setAttribute('type', 'radio');
 					// populate the colour information
 					input.setAttribute('name', 'colour');
 					input.setAttribute('data-action', 'colour');
@@ -71,7 +66,7 @@ export class Palette {
 			this.paletteContainer.appendChild(swatch.input);
 		}
 		// check the first option by default
-		if (!multi) this.paletteContainer.querySelector('input:first-of-type').checked = true;
+		this.paletteContainer.querySelector('input:first-of-type').checked = true;
 	}
 	
 	addAlphaSwatches () {

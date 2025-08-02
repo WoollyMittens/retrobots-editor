@@ -14,28 +14,26 @@ class ParallexSpriteEditor {
 		// connect the output
 		this.encoded = document.querySelector(model.encoded);
 		this.encoded.addEventListener('change', this.decodeInput.bind(this));
+		// establish the sprite dimensions
+		const width = model.width;
+		const height = model.height;
+		const padding = model.padding;
+		const layers = model.layers;
+		const shades = model.shades;
 		// build the frames]
 		this.frames = new Frames({
-			'container': document.querySelector(this.model.frames),
-			'onSelected': this.update.bind(this),
-			'width': model.width,
-			'height': model.height,
-			'padding': model.padding,
-			'layers': model.layers,
-			'shades': model.shades
+			container: document.querySelector(this.model.frames), 
+			handler: this.update.bind(this), 
+			width, height, padding, layers, shades
 		});
 		// build the sequences
 		this.sequences = new Sequences({
-			'container': document.querySelector(this.model.sequences)
+			container: document.querySelector(this.model.sequences)
 		});
 		// build the sprite
 		this.sprite = new Sprite({
-			'container': document.querySelector(model.canvas),
-			'width': model.width,
-			'height': model.height,
-			'padding': model.padding,
-			'layers': model.layers,
-			'shades': model.shades
+			container: document.querySelector(model.canvas), 
+			width, height, padding, layers, shades
 		});
 		this.sprite.hex = this.frames.load();
 		// only show the directions if applicable
@@ -43,31 +41,33 @@ class ParallexSpriteEditor {
 		this.showDirections();
 		// populate the colour palette
 		this.palette = new Palette({
-			'containers': document.querySelectorAll(`${model.palette}, ${model.opacity}`),
-			'shades': model.shades,
-			'multi': false,
-			'handler': this.changePalette.bind(this)
+			container: document.querySelectorAll(`${model.palette}, ${model.opacity}`), 
+			handler: this.changePalette.bind(this), 
+			shades
 		});
 		// handle the drawing clicks
 		this.handleDrawing();
 		// populate the layer selector
 		this.stack = document.querySelector(model.stack);
 		this.buildStack(model.layers);
-		// handle the controls
-		this.controls = document.querySelector(model.controls);
-		this.controls.addEventListener('click', this.handleControls.bind(this));
-		this.controls.addEventListener('submit', evt => evt.preventDefault());
 		// update the preview
 		// TODO: loop through the active squence, or view just the active bank index
 		this.preview = new Sprite({
-			'container': document.querySelector(model.preview),
-			'width': model.width,
-			'height': model.height,
-			'padding': model.padding,
-			'layers': model.layers,
-			'shades': model.shades
+			container: document.querySelector(model.preview), 
+			width, height, padding, layers, shades
 		});
 		this.updatePreview();
+		// handle the controls TODO: handle clicks as well as changes
+		this.controls = document.querySelector(model.controls);
+		this.controls.addEventListener('submit', (evt) => { evt.preventDefault() });
+		const actions = this.controls.querySelectorAll('[data-action]');
+		for (let action of actions) {
+			action.addEventListener('click', this.handleActions.bind(this, action));
+		}
+		const settings = this.controls.querySelectorAll('[data-setting]');
+		for (let setting of settings) {
+			setting.addEventListener('click', this.handleSettings.bind(this, setting));
+		}
 	}
 
 	update() {
@@ -119,24 +119,29 @@ class ParallexSpriteEditor {
 		}
 	}
 
-	handleControls(evt) {
-		// check if something with a configured action has been pushed
-		const target = evt.target;
-		const action = target.getAttribute('data-action');
-		if (action) {
-			switch(action) {
-				case 'nw': this.changeDirection(-1, -1, -1); break;
-				case 'n': this.changeDirection(0, -1, -1); break;
-				case 'ne': this.changeDirection(1, -1, -1); break;
-				case 'w': this.changeDirection(-1, 0, 0); break;
-				case 'x': this.changeDirection(0, 0, 0); break;
-				case 'e': this.changeDirection(1, 0, 0); break;
-				case 'sw': this.changeDirection(-1, 1, 1); break;
-				case 's': this.changeDirection(0, 1, 1); break;
-				case 'se': this.changeDirection(1, 1, 1); break;
-				case 'stack': this.changeStack(target); break;
-				default: console.log('unassigned button:', action);
-			}
+	handleActions(element) {
+		// handle controls with a predefined action
+		const action = element.getAttribute('data-action');
+		switch(action) {
+			case 'nw': this.changeDirection(-1, -1, -1); break;
+			case 'n': this.changeDirection(0, -1, -1); break;
+			case 'ne': this.changeDirection(1, -1, -1); break;
+			case 'w': this.changeDirection(-1, 0, 0); break;
+			case 'x': this.changeDirection(0, 0, 0); break;
+			case 'e': this.changeDirection(1, 0, 0); break;
+			case 'sw': this.changeDirection(-1, 1, 1); break;
+			case 's': this.changeDirection(0, 1, 1); break;
+			case 'se': this.changeDirection(1, 1, 1); break;
+			case 'stack': this.changeStack(element); break;
+			default: console.log('unassigned action:', action);
+		}
+	}
+
+	handleSettings(element) {
+		// TODO: handle controls with a configuration value
+		const setting = element.getAttribute('data-setting');
+		switch(setting) {
+			default: console.log('unassigned setting:', setting);
 		}
 	}
 
@@ -147,8 +152,7 @@ class ParallexSpriteEditor {
 		this.updatePreview();
 	}
 
-	changePalette(colours) {
-		const colour = colours[0];
+	changePalette(colour) {
 		// set the active colour values
 		this.red = colour.red;
 		this.green = colour.green;

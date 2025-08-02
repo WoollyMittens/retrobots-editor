@@ -33,6 +33,22 @@
 				<legend>Layers</legend>
 			</fieldset>
 
+			<fieldset class="sprite-playback">
+				<legend>Playback</legend>
+				<label>
+					<span>Rate:</span>
+					<input data-setting="range" type="range" name="rate" min="0" max="60" step="5" value="15"/>
+				</label>
+				<label>
+					<span>Scale:</span>
+					<input data-setting="scale" type="range" name="scale" min="1" max="100" step="10" value="50"/>
+				</label>
+				<label>
+					<span>Background:</span>
+					<input data-setting="background" type="color" name="background" value="#FFFFFF"/>
+				</label>
+			</fieldset>
+
 			<fieldset class="sprite-encoded">
 				<legend>Input/Output</legend>
 				<textarea name="encoded">TODO: import/export frames;sequences</textarea>
@@ -69,22 +85,7 @@
 			</div>
 		</fieldset>
 
-		<figure class="sprite-preview">
-			<figcaption>
-				<label>
-					<span>Rate:</span>
-					<input type="range" name="rate" min="0" max="60" step="5" value="15"/>
-				</label>
-				<label>
-					<span>Scale:</span>
-					<input type="range" name="scale" min="1" max="100" step="10" value="50"/>
-				</label>
-				<label>
-					<span>Background:</span>
-					<input type="color" name="background" value="#FFFFFF"/>
-				</label>
-			</figcaption>
-		</figure>
+		<figure class="sprite-preview"></figure>
 
 	</section>
 
