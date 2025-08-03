@@ -51,7 +51,7 @@ class ParallexSpriteEditor {
 		this.stack = document.querySelector(model.stack);
 		this.buildStack(model.layers);
 		// update the preview
-		// TODO: loop through the active squence, or view just the active bank index
+		// TODO: move to a class that shows the frame, playback controls, and loops the sequence
 		this.preview = new Sprite({
 			container: document.querySelector(model.preview), 
 			width, height, padding, layers, shades
@@ -192,7 +192,7 @@ class ParallexSpriteEditor {
 		this.frames.json = this.encoded.value;
 		// load the active/default frame from the bank
 		this.sprite.hex = this.frames.load();
-		// redraw the editor
+		// redraw the preview
 		this.updatePreview();
 	}
 }
