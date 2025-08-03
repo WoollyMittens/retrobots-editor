@@ -2,6 +2,7 @@ import { Palette } from "./palette.js";
 import { Sprite } from "./sprite.js";
 import { Frames } from "./frames.js";
 import { Sequences } from "./sequences.js";
+import { Preview } from "./preview.js";
 
 class ParallexSpriteEditor {
 	constructor(model) {
@@ -51,12 +52,11 @@ class ParallexSpriteEditor {
 		this.stack = document.querySelector(model.stack);
 		this.buildStack(model.layers);
 		// update the preview
-		// TODO: move to a class that shows the frame, playback controls, and loops the sequence
-		this.preview = new Sprite({
+		this.preview = new Preview({
 			container: document.querySelector(model.preview), 
 			width, height, padding, layers, shades
 		});
-		this.updatePreview();
+		this.redraw();
 		// handle the controls TODO: handle clicks as well as changes
 		this.controls = document.querySelector(model.controls);
 		this.controls.addEventListener('submit', (evt) => { evt.preventDefault() });
@@ -74,7 +74,24 @@ class ParallexSpriteEditor {
 		// reload the active sprite from the bank
 		this.sprite.hex = this.frames.load();
 		// redraw the preview
-		this.updatePreview();
+		this.redraw();
+	}
+
+	redraw() {
+		// TODO: get the active sequence
+		const spriteSequence = null;
+		const spriteStep = null;
+		// get the hex value of the sprite
+		const spriteFrame = this.sprite.hex;
+		const spriteDirection = this.sprite.direction;
+		// mirror the bitmap in the preview
+		this.preview.frame = spriteFrame;
+		// mirror the direction in the preview
+		this.preview.direction = spriteDirection;
+		// export the binary bitmap as base64
+		this.frames.update(spriteFrame);
+		// TODO: export both the frames and sequences
+		this.encoded.value = this.frames.json;
 	}
 
 	showDirections() {
@@ -108,7 +125,7 @@ class ParallexSpriteEditor {
 		// apply the colour code
 		this.sprite.paint(index, colour);
 		// update the preview
-		this.updatePreview();
+		this.redraw();
 	}
 
 	handleDrawing() {
@@ -141,6 +158,10 @@ class ParallexSpriteEditor {
 		// TODO: handle controls with a configuration value
 		const setting = element.getAttribute('data-setting');
 		switch(setting) {
+			case 'rate': this.changeRate(element.value); break;
+			case 'scale': this.changeScale(element.value); break;
+			case 'background': this.changeBackground(element.value); break;
+			case 'background_set': this.changeBackground(document.querySelector('[data-setting="background"]').value); break;
 			default: console.log('unassigned setting:', setting);
 		}
 	}
@@ -149,7 +170,7 @@ class ParallexSpriteEditor {
 		// call the sprite to update
 		this.sprite.direction = {x, y, z};
 		// update the preview
-		this.updatePreview();
+		this.redraw();
 	}
 
 	changePalette(colour) {
@@ -168,22 +189,19 @@ class ParallexSpriteEditor {
 		this.sprite.layers[name].style.display = state ? 'block' : 'none';
 	}
 
-	updatePreview() {
-		// TODO: get the active sequence
-		const spriteSequence = null;
-		const spriteStep = null;
-		// get the hex value of the sprite
-		const spriteHex = this.sprite.hex;
-		const spriteDirection = this.sprite.direction;
-		// mirror the bitmap in the preview
-		this.preview.hex = spriteHex;
-		// mirror the direction in the preview
-		this.preview.direction = spriteDirection;
-		// export the binary bitmap as base64
-		this.frames.update(spriteHex);
-		// preview the bank json
-		// TODO: export both the frames and sequences
-		this.encoded.value = this.frames.json;
+	changeRate(fps) {
+		// update the preview rate
+		this.preview.rate = fps;
+	}
+
+	changeScale(zoom) {
+		// update the preview zoom
+		this.preview.scale = zoom;
+	}
+
+	changeBackground(colour) {
+		// update the preview background
+		this.preview.background = colour;
 	}
 
 	decodeInput() {
@@ -193,7 +211,7 @@ class ParallexSpriteEditor {
 		// load the active/default frame from the bank
 		this.sprite.hex = this.frames.load();
 		// redraw the preview
-		this.updatePreview();
+		this.redraw();
 	}
 }
 

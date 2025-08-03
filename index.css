@@ -78,9 +78,13 @@ body {
 .sprite-preview {
 	grid-area: preview;
 	justify-self: flex-end;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: auto;
 	aspect-ratio: 1;
+	overflow: hidden;
 	position: relative;
 	border: solid 1px black;
 	margin: 0;
@@ -88,9 +92,9 @@ body {
 
 	svg {
 		display: block;
-		width: 100%;
+		width: auto;
 		height: auto;
-		transform: scale(0.5);
+		transform: scale(1);
 	}
 }
 
@@ -255,22 +259,31 @@ body {
 
 	label {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-items: stretch;
 		gap: 0.5rem;
 		width: 100%;
 	}
 
 	span {
+		flex: 1 1 100%;
 		font-size: 0.75rem;
 	}
 
 	input[type="range"] {
-		width: 100%;
+		flex: 1 1 auto;
 	}
 
 	input[type="color"] {
-		width: 100%;
+		flex: 1 1 auto;
+		min-height: 2rem;
+	}
+
+	button {
+		flex: 0 1 auto;
+		min-height: 2rem;
 	}
 }
 
