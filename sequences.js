@@ -4,11 +4,11 @@ export class Sequences {
 		this.model = model;
         // set up storage for a bank of sequences
 		this.bank = {
-			'lorem': '1,2,3',
-			'ipsum': '4,5,6'
+			'lorem': [1,2,3],
+			'ipsum': [4,5,6]
 		};
 		this.step = 0;
-		this.active = null;
+		this.active = '';
 		// build the interface if desired
 		this.redraw();
     }
@@ -31,21 +31,22 @@ export class Sequences {
 			noneLabel.appendChild(noneSpan);
 			this.model.container.appendChild(noneLabel);
 			// create the selector list
-			const seqUl = document.createElement('ul');
+			const sequenceList = document.createElement('ul');
 			for (let key in this.bank) {
 				// create the sequence selector
-				let seqLi = document.createElement('li');
+				let sequenceItem = document.createElement('li');
 				// create the selector radio
-				let seqLabel = document.createElement('label');
-				let seqInput = document.createElement('input');
-				seqInput.setAttribute('type', 'radio');
-				seqInput.setAttribute('name', 'sequence');
-				seqInput.setAttribute('value', key);
+				let radioLabel = document.createElement('label');
+				let radioInput = document.createElement('input');
+				radioInput.setAttribute('type', 'radio');
+				radioInput.setAttribute('name', 'sequence');
+				radioInput.setAttribute('value', key);
+				radioInput.addEventListener('change', this.select.bind(this, radioInput));
 				let seqSpan = document.createElement('span');
 				seqSpan.innerHTML = 'Name';
-				seqLabel.appendChild(seqInput);
-				seqLabel.appendChild(seqSpan);
-				seqLi.appendChild(seqLabel);
+				radioLabel.appendChild(radioInput);
+				radioLabel.appendChild(seqSpan);
+				sequenceItem.appendChild(radioLabel);
 				// create the name field
 				let nameLabel = document.createElement('label');
 				let nameInput = document.createElement('input');
@@ -53,13 +54,13 @@ export class Sequences {
 				nameInput.setAttribute('name', 'name');
 				nameInput.setAttribute('value', key);
 				nameInput.setAttribute('required', '');
+				nameInput.addEventListener('change', this.rename.bind(this, radioInput, nameInput));
 				let nameSpan = document.createElement('span');
 				nameSpan.innerHTML = "Name";
 				nameLabel.appendChild(nameSpan);
 				nameLabel.appendChild(nameInput);
-				seqLi.appendChild(nameLabel);
+				sequenceItem.appendChild(nameLabel);
 				// create the frames field
-				// TODO: make constructor for form fields, so this is more compact
 				let framesLabel = document.createElement('label');
 				let framesInput = document.createElement('input');
 				framesInput.setAttribute('type', 'text');
@@ -68,33 +69,84 @@ export class Sequences {
 				framesInput.setAttribute('required', '');
 				framesInput.setAttribute('pattern', '^\d(?:,\d)*$');
 				framesInput.setAttribute('placeholder', '1,2,3');
+				framesInput.addEventListener('change', this.update.bind(this, radioInput, framesInput));
 				let framesSpan = document.createElement('span');
 				framesSpan.innerHTML = "Frames";
 				framesLabel.appendChild(framesSpan);
 				framesLabel.appendChild(framesInput);
-				seqLi.appendChild(framesLabel);
+				sequenceItem.appendChild(framesLabel);
 				// create the remove button
 				let removeButton = document.createElement('button');
 				removeButton.setAttribute('data-action', 'remove_sequence');
 				removeButton.innerHTML = 'x';
-				seqLi.appendChild(removeButton);
+				removeButton.addEventListener('click', this.remove.bind(this, radioInput));
+				sequenceItem.appendChild(removeButton);
 				// add everything to the list container
-				seqUl.appendChild(seqLi);
+				sequenceList.appendChild(sequenceItem);
 			}
-			this.model.container.appendChild(seqUl);
+			this.model.container.appendChild(sequenceList);
 			// create the add button
 			let addButton = document.createElement('button');
 			addButton.setAttribute('data-action', 'add_sequence');
 			addButton.innerHTML = '+';
+			addButton.addEventListener('click', this.add.bind(this));
 			this.model.container.appendChild(addButton);
 		}
 	}
+	// select an active sequence
+	select(radioField) {
+		// cancel the click
+		console.log('select', radioField);
+		// store the active key
+		this.active = radioField.value;
+	}
 	// add a new sequence to the list
-	add() {}
+	add(evt) {
+		// cancel the click
+		console.log('add');
+		evt?.preventDefault();
+		// add the given sequence to the bank, or create a new one
+		const key = 'seq_' + new Date().getTime();
+		const value = [];
+		this.bank[key] = value;
+	}
 	// remove a sequence from the list
-	remove(name) {}
+	remove(radioField, evt) {
+		console.log('remove', radioField);
+		// cancel the click
+		evt?.preventDefault();
+		// get the value from the field
+		const key =  radioField.value;
+		// remove the named key
+		if (this.bank[key]) delete(this.bank[key]);
+	}
 	// rename a sequence
-	rename(name, input) {}
+	rename(radioField, nameField, evt) {
+		console.log('rename', radioField, nameField);
+		// TODO: validate the name for syntax/doubles
+		// cancel the click
+		evt?.preventDefault();
+		// get the values from the field
+		const key =  radioField.value;
+		const name = nameField.value;
+		// if the old key exists
+		if (this.bank[key]) {
+			// add the new name
+			this.bank[name] = this.bank[key];
+			// remove the old key
+			delete(this.bank[key]);
+		}
+	}
 	// update a sequence
-	update(name, input) {}
+	update(radioField, framesField, evt) {
+		console.log('update', radioField, framesField);
+		// TODO: validate the csv for syntax
+		// cancel the click
+		evt?.preventDefault();
+		// get the values from the field
+		const key =  radioField.value;
+		const value = framesField.value;
+		// store the new value
+		this.bank[key] = value;
+	}
 }
