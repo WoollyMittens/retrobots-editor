@@ -29,7 +29,8 @@ class ParallexSpriteEditor {
 		});
 		// build the sequences
 		this.sequences = new Sequences({
-			container: document.querySelector(this.model.sequences)
+			container: document.querySelector(this.model.sequences),
+			handler: this.update.bind(this)
 		});
 		// build the sprite
 		this.sprite = new Sprite({
@@ -54,6 +55,8 @@ class ParallexSpriteEditor {
 		// update the preview
 		this.preview = new Preview({
 			container: document.querySelector(model.preview), 
+			frames: this.frames,
+			sequences: this.sequences,
 			width, height, padding, layers, shades
 		});
 		this.redraw();
@@ -78,18 +81,12 @@ class ParallexSpriteEditor {
 	}
 
 	redraw() {
-		// TODO: get the active sequence
-		const spriteSequence = null;
-		const spriteStep = null;
-		// get the hex value of the sprite
-		const spriteFrame = this.sprite.hex;
+		// get the direction of the sprite
 		const spriteDirection = this.sprite.direction;
-		// mirror the bitmap in the preview
-		this.preview.frame = spriteFrame;
-		// mirror the direction in the preview
-		this.preview.direction = spriteDirection;
 		// export the binary bitmap as base64
-		this.frames.update(spriteFrame);
+		this.frames.update(this.sprite.hex);
+		// update the preview
+		this.preview.update();
 		// TODO: export both the frames and sequences
 		this.encoded.value = this.frames.json;
 	}
@@ -167,10 +164,10 @@ class ParallexSpriteEditor {
 	}
 
 	changeDirection(x, y, z) {
-		// call the sprite to update
+		// update the sprite direction
 		this.sprite.direction = {x, y, z};
-		// update the preview
-		this.redraw();
+		// update the preview direction
+		this.preview.direction = {x, y, z};
 	}
 
 	changePalette(colour) {

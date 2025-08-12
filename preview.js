@@ -4,19 +4,36 @@ export class Preview {
 	constructor (model) {
 		// store the model
 		this.model = model;
+		this.sequences = model.sequences;
+		this.frames = model.frames;
 		// create the sprite in the preview container
-		this.sprite = new Sprite(model);
+		this.sprite = new Sprite({
+			'container': this.model.container,
+			'width': this.frames.model.width,
+			'height': this.frames.model.height,
+			'padding': this.frames.model.padding,
+			'layers': this.frames.model.layers,
+			'shades': this.frames.model.shades
+		});
+		// the current playing sequence
+		this.current = null;
+		this.step = null;
 		// set the intial values
 		this.rate = 0.5;
 		this.scale = 0.5;
 	}
 
-	set frame(value) {
-		this.sprite.hex = value;
-	}
-
-	get frame() {
-		return this.sprite.hex;
+	update() {
+		// TODO: play the active sequence using the frames
+		// if the active sequence is currently playing
+			// increment the frame
+		// or if this is a new sequence
+			// make this the currently playing one
+			// reset the frame count
+			// show the first frame from the sequence
+		// or
+			// just display the active frame from the bank
+			this.sprite.hex = this.frames.load();
 	}
 
 	set direction(value) {
@@ -26,18 +43,6 @@ export class Preview {
 	get direction() {
 		return this.sprite.direction;
 	}
-
-	set sequence(value) {}
-
-	get sequence() { return null; }
-
-	set step(value) {}
-
-	get step() { return null; }
-
-	set rate(value) {}
-
-	get rate() { return null; }
 
 	set scale(value) {
 		// convert the value to a range of scales

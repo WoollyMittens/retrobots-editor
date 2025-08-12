@@ -8,7 +8,7 @@ export class Sequences {
 			'ipsum': [4,5,6]
 		};
 		this.step = 0;
-		this.active = '';
+		this.active = null;
 		// build the interface if desired
 		this.redraw();
     }
@@ -24,7 +24,7 @@ export class Sequences {
 			noneInput.setAttribute('type', 'radio');
 			noneInput.setAttribute('name', 'sequence');
 			noneInput.setAttribute('value', '');
-			noneInput.setAttribute('checked', '');
+			noneInput.checked = (!this.active || !this.bank[this.active]);
 			const noneSpan = document.createElement('span');
 			noneSpan.innerHTML = 'None';
 			noneLabel.appendChild(noneInput);
@@ -41,6 +41,7 @@ export class Sequences {
 				radioInput.setAttribute('type', 'radio');
 				radioInput.setAttribute('name', 'sequence');
 				radioInput.setAttribute('value', key);
+				radioInput.checked = (this.active === key);
 				radioInput.addEventListener('change', this.select.bind(this, radioInput));
 				let seqSpan = document.createElement('span');
 				seqSpan.innerHTML = 'Name';
@@ -67,7 +68,7 @@ export class Sequences {
 				framesInput.setAttribute('name', 'frames');
 				framesInput.setAttribute('value', this.bank[key]);
 				framesInput.setAttribute('required', '');
-				framesInput.setAttribute('pattern', '^\d(?:,\d)*$');
+				framesInput.setAttribute('pattern', '^\\d(?:,\\d)*$');
 				framesInput.setAttribute('placeholder', '1,2,3');
 				framesInput.addEventListener('change', this.update.bind(this, radioInput, framesInput));
 				let framesSpan = document.createElement('span');
@@ -99,6 +100,8 @@ export class Sequences {
 		console.log('select', radioField);
 		// store the active key
 		this.active = radioField.value;
+        // call back the parent
+        this.model.handler();
 	}
 	// add a new sequence to the list
 	add(evt) {
@@ -109,6 +112,8 @@ export class Sequences {
 		const key = 'seq_' + new Date().getTime();
 		const value = [];
 		this.bank[key] = value;
+		// redraw the interface
+		this.redraw();
 	}
 	// remove a sequence from the list
 	remove(radioField, evt) {
@@ -119,34 +124,55 @@ export class Sequences {
 		const key =  radioField.value;
 		// remove the named key
 		if (this.bank[key]) delete(this.bank[key]);
+		// redraw the interface
+		this.redraw();
+        // call back the parent
+        this.model.handler();
 	}
 	// rename a sequence
 	rename(radioField, nameField, evt) {
 		console.log('rename', radioField, nameField);
-		// TODO: validate the name for syntax/doubles
 		// cancel the click
 		evt?.preventDefault();
 		// get the values from the field
 		const key =  radioField.value;
 		const name = nameField.value;
 		// if the old key exists
-		if (this.bank[key]) {
+		if (this.bank[key] && name.length > 0) {
+			// unmark any previous error
+			nameField.removeAttribute('data-invalid');
 			// add the new name
 			this.bank[name] = this.bank[key];
 			// remove the old key
 			delete(this.bank[key]);
+			// call back the parent
+			this.model.handler();
+		}
+		// or mark the error
+		else {
+			nameField.setAttribute('data-invalid', '');
 		}
 	}
 	// update a sequence
 	update(radioField, framesField, evt) {
-		console.log('update', radioField, framesField);
-		// TODO: validate the csv for syntax
 		// cancel the click
 		evt?.preventDefault();
 		// get the values from the field
 		const key =  radioField.value;
 		const value = framesField.value;
-		// store the new value
-		this.bank[key] = value;
+		// TODO: validate the csv for syntax
+		const regExp = new RegExp(framesField.getAttribute('pattern'), 'gi');
+		if (regExp.test(value)) {
+			// unmark any previous error
+			framesField.removeAttribute('data-invalid');
+			// store the new value
+			this.bank[key] = JSON.parse(`[${value}]`);
+			// call back the parent
+			this.model.handler();
+		}
+		// mark the error
+		else {
+			framesField.setAttribute('data-invalid', '');
+		}
 	}
 }

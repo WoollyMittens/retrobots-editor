@@ -91,7 +91,7 @@ export class Frames {
         // select the active bitmap
         this.active = index;
         // call back the parent
-        this.model.handler(index);
+        this.model.handler();
     }
     // shift the position of a frame in the bank
     shift(sourceIndex, direction, evt) {
@@ -107,7 +107,7 @@ export class Frames {
         // redraw the interface
         this.redraw();
         // call back to parent
-        this.model.handler(this.active);
+        this.model.handler();
     }
     // add a new frame to the bank
     add() {

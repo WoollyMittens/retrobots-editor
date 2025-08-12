@@ -18,6 +18,14 @@ body {
 	padding: 0;
 }
 
+label:has(input[data-invalid]),
+label:has(input:invalid) {
+	color: Red;
+	input {
+		border-color: red;
+	}
+}
+
 .sprite-editor {
 	display: grid;
 	grid-template-columns:4fr 1fr 1fr 4fr;
