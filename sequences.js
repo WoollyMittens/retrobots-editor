@@ -4,11 +4,10 @@ export class Sequences {
 		this.model = model;
         // set up storage for a bank of sequences
 		this.bank = {
-			'lorem': [1,2,3],
-			'ipsum': [4,5,6]
+			'lorem': [0,1,2],
+			'ipsum': [3,4,5]
 		};
-		this.step = 0;
-		this.active = null;
+		this.active = '';
 		// build the interface if desired
 		this.redraw();
     }
@@ -25,6 +24,7 @@ export class Sequences {
 			noneInput.setAttribute('name', 'sequence');
 			noneInput.setAttribute('value', '');
 			noneInput.checked = (!this.active || !this.bank[this.active]);
+			noneInput.addEventListener('change', this.select.bind(this, noneInput));
 			const noneSpan = document.createElement('span');
 			noneSpan.innerHTML = 'None';
 			noneLabel.appendChild(noneInput);
@@ -96,8 +96,6 @@ export class Sequences {
 	}
 	// select an active sequence
 	select(radioField) {
-		// cancel the click
-		console.log('select', radioField);
 		// store the active key
 		this.active = radioField.value;
         // call back the parent
@@ -106,7 +104,6 @@ export class Sequences {
 	// add a new sequence to the list
 	add(evt) {
 		// cancel the click
-		console.log('add');
 		evt?.preventDefault();
 		// add the given sequence to the bank, or create a new one
 		const key = 'seq_' + new Date().getTime();
@@ -117,7 +114,6 @@ export class Sequences {
 	}
 	// remove a sequence from the list
 	remove(radioField, evt) {
-		console.log('remove', radioField);
 		// cancel the click
 		evt?.preventDefault();
 		// get the value from the field
@@ -131,7 +127,6 @@ export class Sequences {
 	}
 	// rename a sequence
 	rename(radioField, nameField, evt) {
-		console.log('rename', radioField, nameField);
 		// cancel the click
 		evt?.preventDefault();
 		// get the values from the field

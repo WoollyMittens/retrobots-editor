@@ -81,8 +81,6 @@ class ParallexSpriteEditor {
 	}
 
 	redraw() {
-		// get the direction of the sprite
-		const spriteDirection = this.sprite.direction;
 		// export the binary bitmap as base64
 		this.frames.update(this.sprite.hex);
 		// update the preview

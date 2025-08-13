@@ -16,24 +16,40 @@ export class Preview {
 			'shades': this.frames.model.shades
 		});
 		// the current playing sequence
-		this.current = null;
-		this.step = null;
+		this.sequence = '';
+		this.counter = 0;
+		this.timeout = null;
 		// set the intial values
-		this.rate = 0.5;
+		this.rate = 0.25;
 		this.scale = 0.5;
 	}
 
 	update() {
-		// TODO: play the active sequence using the frames
-		// if the active sequence is currently playing
-			// increment the frame
-		// or if this is a new sequence
+		// cancel any queued update
+		clearTimeout(this.timeout);
+		// reset the counter if the active sequence has changed
+		if (this.sequence != this.sequences.active) {
 			// make this the currently playing one
+			this.sequence = this.sequences.active;
 			// reset the frame count
-			// show the first frame from the sequence
+			this.counter = 0;
+		}
+		// if the active sequence is currently playing
+		if (this.sequence != '') {
+			// increment the step count
+			this.counter = (this.counter + 1) % this.sequences.bank[this.sequence].length;
+			// show the corresponding frame from the sequence
+			const index = this.sequences.bank[this.sequence][this.counter];
+			this.sprite.hex = this.frames.bank[index];
+			// queue the next update at the set rate
+			const delay = 1000 / Math.max(60 * this.rate, 1);
+			this.timeout = setTimeout(this.update.bind(this), delay);
+		}
 		// or
+		else {
 			// just display the active frame from the bank
 			this.sprite.hex = this.frames.load();
+		}
 	}
 
 	set direction(value) {

@@ -5,9 +5,14 @@ export class Frames {
 		// store the model
 		this.model = model;
         // set up storage for a bank of sprites
-        this.bank = [];
+        this.bank = [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAcHAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAcHBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwcHBwAAAAAAAAAAAAcAAAAABwAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAHBwcHBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwcHBwcAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAcHAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAHAAAAAAAAAAAHBwcHBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ];
         this.previews = [];
         this.active = 0;
+        this.buffer = null;
         // build the interface if desired
         this.redraw();
     }
@@ -73,17 +78,40 @@ export class Frames {
                 shiftRight.setAttribute('data-action', 'shift_left');
                 shiftRight.addEventListener('click', this.shift.bind(this, index, 1));
                 label.appendChild(shiftRight);
+                // add button to delete this frame
+                let deleteFrame = document.createElement('button');
+                deleteFrame.innerHTML = 'x';
+                deleteFrame.setAttribute('data-action', 'delete_frame');
+                deleteFrame.addEventListener('click', this.delete.bind(this, index));
+                label.appendChild(deleteFrame);
                 // handle making a selection
                 radio.addEventListener('change', this.select.bind(this, index));
                 // add the selector to the container
                 this.model.container.appendChild(label);
             }
-            // make the last grid element an "add" button
-            const button = document.createElement('button');
-            button.setAttribute('data-action', 'add_frame');
-            button.addEventListener('click', this.add.bind(this));
-            button.innerHTML = '+';
-            this.model.container.appendChild(button);
+            // make the last grid element action controls
+            const nav = document.createElement('nav');
+            nav.setAttribute('class', 'actions')
+            // add an "add" button
+            const addButton = document.createElement('button');
+            addButton.setAttribute('data-action', 'add_frame');
+            addButton.addEventListener('click', this.add.bind(this));
+            addButton.innerHTML = '+';
+            nav.appendChild(addButton);
+            // add a "copy" button
+            const copyButton = document.createElement('button');
+            copyButton.setAttribute('data-action', 'copy_frame');
+            copyButton.addEventListener('click', this.copy.bind(this));
+            copyButton.innerHTML = 'Copy';
+            nav.appendChild(copyButton);
+            // add a "paste" button
+            const pasteButton = document.createElement('button');
+            pasteButton.setAttribute('data-action', 'paste_frame');
+            pasteButton.addEventListener('click', this.paste.bind(this));
+            pasteButton.innerHTML = 'Paste';
+            nav.appendChild(pasteButton);
+            // add copy, paste, add, delete buttons to the container
+            this.model.container.appendChild(nav);
         }
     }
     // select an active frame from the bank
@@ -110,8 +138,35 @@ export class Frames {
         this.model.handler();
     }
     // add a new frame to the bank
-    add() {
+    add(evt) {
+        evt?.preventDefault();
+        // add a new item at the end of the bank
         this.bank.push(null);
+        // update the interface
+        this.redraw();
+    }
+    // TODO: remove a frame from the bank
+    delete(index, evt) {
+        evt?.preventDefault();
+        // remove the active item from the bank
+        this.bank.splice(index, 1);
+        // update the interface
+        this.redraw();
+    }
+    // TODO: copy the contents of a frame
+    copy(evt) {
+        evt?.preventDefault();
+        // store the contents of the active item
+        this.buffer = this.bank[this.active];
+        // update the interface
+        this.redraw();
+    }
+    // TODO: paste the contents of a frame
+    paste(evt) {
+        evt?.preventDefault();
+        // insert the stored contents in the active item
+        this.bank[this.active] = this.buffer;
+        // update the interface
         this.redraw();
     }
     // retrieve a bitmap from the bank
