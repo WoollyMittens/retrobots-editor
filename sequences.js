@@ -11,6 +11,14 @@ export class Sequences {
 		// build the interface if desired
 		this.redraw();
     }
+    // store and retrieve the entire bank in json format
+    get json() {
+        return JSON.stringify(this.bank);
+    }
+    set json(jsonData) {
+        this.bank = JSON.parse(jsonData);
+        this.redraw();
+    }
     // redraw the interface to reflect the stored sequences and active index
 	redraw() {
         // if the bank requires an interface

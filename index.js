@@ -86,7 +86,10 @@ class ParallexSpriteEditor {
 		// update the preview
 		this.preview.update();
 		// TODO: export both the frames and sequences
-		this.encoded.value = this.frames.json;
+		this.encoded.value = JSON.stringify({
+			"frames": this.frames.bank,
+			"sequences": this.sequences.bank
+		});
 	}
 
 	showDirections() {
@@ -150,7 +153,7 @@ class ParallexSpriteEditor {
 	}
 
 	handleSettings(element) {
-		// TODO: handle controls with a configuration value
+		// handle controls with a configuration value
 		const setting = element.getAttribute('data-setting');
 		switch(setting) {
 			case 'rate': this.changeRate(element.value); break;
@@ -201,8 +204,9 @@ class ParallexSpriteEditor {
 
 	decodeInput() {
 		// import the bank from the preview field
-		// TODO: import both the frames and sequences
-		this.frames.json = this.encoded.value;
+		const data = JSON.parse(this.encoded.value);
+		this.frames.bank = data.frames;
+		this.sequences.bank = data.sequences;
 		// load the active/default frame from the bank
 		this.sprite.hex = this.frames.load();
 		// redraw the preview
